@@ -37,4 +37,19 @@ describe('PromptInput', () => {
     expect(screen.getByRole('button', { name: '컴포넌트 생성' })).toBeDisabled();
     expect(onGenerate).not.toHaveBeenCalled();
   });
+
+  it('최근 프롬프트를 선택하면 입력값으로 채운다', async () => {
+    const user = userEvent.setup();
+    render(
+      <PromptInput
+        onGenerate={vi.fn()}
+        isLoading={false}
+        promptHistory={['대시보드 카드']}
+      />,
+    );
+
+    await user.click(screen.getByRole('button', { name: '대시보드 카드' }));
+
+    expect(screen.getByRole('textbox')).toHaveValue('대시보드 카드');
+  });
 });
