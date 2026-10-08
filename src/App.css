@@ -56,6 +56,8 @@
 .prompt-form { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 12px; align-items: end; }
 .prompt-textarea { min-height: 154px; padding: 17px 18px; resize: vertical; font-size: 1rem; line-height: 1.6; letter-spacing: -.02em; }
 .prompt-textarea::placeholder { color: var(--text-soft); }
+.prompt-length-status, .prompt-length-error { grid-column: 1; margin-top: -4px; color: var(--text-soft); font-size: .75rem; }
+.prompt-length-error { color: #c0362c; }
 .btn-generate { height: 48px; padding: 0 19px; border: 0; border-radius: 980px; background: var(--primary); color: #fff; cursor: pointer; font-size: .9rem; font-weight: 600; letter-spacing: -.015em; white-space: nowrap; transition: background .18s ease, transform .18s ease, opacity .18s ease; }
 .btn-generate:hover:not(:disabled) { background: var(--primary-hover); transform: scale(1.02); }
 .btn-generate:disabled { opacity: .42; cursor: not-allowed; }
