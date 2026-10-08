@@ -18,7 +18,7 @@ function App() {
     anthropic: false,
     google: false,
   });
-  const { components, isLoading, error, generate, removeComponent, clearAll } =
+  const { draft, components, isLoading, error, generate, removeComponent, clearAll } =
     useComponentGenerator();
 
   useEffect(() => {
@@ -130,13 +130,13 @@ function App() {
       )}
 
       <section className="results-section">
-        {components.length > 0 && (
+        {(components.length > 0 || draft) && (
           <div className="results-header">
             <div>
               <span className="panel-kicker">Your components</span>
               <h2>생성된 컴포넌트</h2>
             </div>
-            <button className="btn-clear" onClick={clearAll}>
+            <button className="btn-clear" onClick={clearAll} disabled={isLoading}>
               전체 삭제
             </button>
           </div>
@@ -162,14 +162,11 @@ function App() {
           </div>
         )}
 
-        {isLoading && (
-          <div className="loading-card">
-            <div className="loading-pulse" />
-            <p>컴포넌트를 생성하고 있습니다...</p>
-          </div>
-        )}
-
         <div className="results-grid">
+          {draft && (
+            <ComponentCard key={draft.id} component={draft} onRemove={removeComponent}
+              onRegenerate={handleGenerate} isLoading={isLoading} isGenerating />
+          )}
           {components.map((component) => (
             <ComponentCard
               key={component.id}

@@ -8,12 +8,14 @@ interface ComponentCardProps {
   onRemove: (id: string) => void;
   onRegenerate: (prompt: string) => void;
   isLoading: boolean;
+  isGenerating?: boolean;
 }
 
 type Tab = 'preview' | 'code';
 
-export function ComponentCard({ component, onRemove, onRegenerate, isLoading }: ComponentCardProps) {
-  const [activeTab, setActiveTab] = useState<Tab>('preview');
+export function ComponentCard({ component, onRemove, onRegenerate, isLoading, isGenerating = false }: ComponentCardProps) {
+  const [selectedTab, setActiveTab] = useState<Tab>('preview');
+  const activeTab = isGenerating ? 'code' : selectedTab;
   const [previewKey, setPreviewKey] = useState(0);
   const createdAt = component.createdAt.toLocaleTimeString('ko-KR', {
     hour: '2-digit',
@@ -31,6 +33,7 @@ export function ComponentCard({ component, onRemove, onRegenerate, isLoading }: 
           <button
             className="btn-refresh"
             onClick={() => setPreviewKey((k) => k + 1)}
+            disabled={isGenerating}
             title="미리보기 새로고침"
             aria-label="미리보기 새로고침"
           >
@@ -45,6 +48,7 @@ export function ComponentCard({ component, onRemove, onRegenerate, isLoading }: 
           </button>
           <button
             className="btn-remove"
+            disabled={isGenerating}
             onClick={() => onRemove(component.id)}
           >
             삭제
@@ -54,6 +58,7 @@ export function ComponentCard({ component, onRemove, onRegenerate, isLoading }: 
       <div className="card-tabs">
         <button
           className={`tab ${activeTab === 'preview' ? 'tab--active' : ''}`}
+          disabled={isGenerating}
           onClick={() => setActiveTab('preview')}
         >
           미리보기
@@ -69,7 +74,7 @@ export function ComponentCard({ component, onRemove, onRegenerate, isLoading }: 
         {activeTab === 'preview' ? (
           <LivePreview key={previewKey} code={component.code} />
         ) : (
-          <CodeView code={component.code} />
+          <CodeView code={component.code || '코드 생성을 기다리고 있습니다...'} />
         )}
       </div>
     </div>
