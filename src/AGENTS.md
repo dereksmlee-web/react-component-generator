@@ -8,6 +8,7 @@ This React/Vite client collects a component request, sends it to the Bun API, an
 
 - Use functional React components and hooks. Keep component-specific state local and place generation lifecycle state in `useComponentGenerator`.
 - Keep API calls in [hooks/useComponentGenerator.ts](./hooks/useComponentGenerator.ts#L13-L59); UI components receive behavior through props rather than performing generation fetches themselves.
+- Keep partial streaming code in the hook's `draft`. Display it in the code tab without executing it; add a generated record and switch to preview only after the server's normalized `done` event. Discard drafts on errors or incomplete streams.
 - Generated components are keyed by a unique id and prepended to the list at [hooks/useComponentGenerator.ts](./hooks/useComponentGenerator.ts#L35-L42). Preserve this newest-first behavior.
 - Keep preview code compatible with `react-live`'s `noInline` mode in [components/LivePreview.tsx](./components/LivePreview.tsx). Do not add client-side transforms that bypass server normalization.
 

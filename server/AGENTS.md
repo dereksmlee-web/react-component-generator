@@ -8,7 +8,7 @@ This Bun server owns provider API calls, server-side key resolution, and the fin
 
 - Use Bun's built-in `fetch`, `Response`, and `Bun.serve`; this module has no provider SDK dependency.
 - Keep generated output as plain JavaScript compatible with `react-live`. The prompt constraints are defined at [index.ts](./index.ts#L7-L20).
-- Normalize model output with `stripCodeFences` then `ensureRenderCall`, in that order, before returning `{ code }` as done at [index.ts](./index.ts#L183-L190).
+- Stream provider text as SSE `delta` events, reset partial code with `reset` when a Google fallback begins, and normalize output with `stripCodeFences` then `ensureRenderCall` before sending the final `done` event with `code`. Report failures after response headers through an `error` event; pre-stream validation retains JSON HTTP errors.
 - Add a provider fallback by passing the ordered model list through `withModelFallback`; do not duplicate retry loops in route handlers.
 
 ## Testing Strategy
@@ -21,5 +21,5 @@ This Bun server owns provider API calls, server-side key resolution, and the fin
 
 - Do not move environment key reads into the client or return raw keys from `/api/config`. `ENV_KEYS` is server-local at [index.ts](./index.ts#L59-L62) and the config route intentionally exposes only boolean availability at [index.ts](./index.ts#L147-L156).
 - Retain CORS headers on all API responses, including preflight and error paths, as established in [index.ts](./index.ts#L51-L55) and [index.ts](./index.ts#L141-L155).
-- Preserve distinct 503 and 429 messages/statuses before the generic error response; the double handling is intentional at [index.ts](./index.ts#L191-L211).
+- Preserve distinct overload (503) and rate-limit (429) messages before generic errors. Before streaming starts, use the corresponding HTTP error status; after SSE headers have been sent, deliver these messages through an `error` event.
 - Do not change `ensureRenderCall` to append a render call blindly. It first recognizes an existing call and only infers uppercase component declarations at [generator.ts](./generator.ts#L16-L23).
