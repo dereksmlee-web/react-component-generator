@@ -63,6 +63,7 @@
 .btn-generate:disabled { opacity: .42; cursor: not-allowed; }
 .loading-spinner { display: inline-flex; align-items: center; gap: 8px; }
 .prompt-examples { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 9px; margin-top: 22px; }
+.prompt-history { margin-top: 14px; }
 .examples-label { grid-column: 1 / -1; color: var(--text-muted); font-size: .77rem; font-weight: 500; }
 .example-chip { min-height: 62px; padding: 11px 12px; border: 1px solid transparent; border-radius: 14px; background: rgba(255,255,255,.58); color: #49494f; cursor: pointer; font-size: .79rem; line-height: 1.43; letter-spacing: -.015em; text-align: left; transition: background .18s ease, border-color .18s ease, transform .18s ease; }
 .example-chip:hover { background: #fff; border-color: rgba(0,113,227,.22); transform: translateY(-1px); }
